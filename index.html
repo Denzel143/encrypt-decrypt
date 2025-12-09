@@ -3,36 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Enkripsi/Dekripsi</title>
+    <title>CryptoLock Pro - Sistem Enkripsi Modern</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
+        :root {
+            --primary: #0a1121;
+            --secondary: #1c2a4a;
+            --accent: #4a8bff;
+            --accent-light: #eef5ff;
+            --text: #333;
+            --text-secondary: #666;
+            --light-gray: #f5f7fa;
+            --border: #e1e5eb;
+            --success: #10b981;
+            --error: #ef4444;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary: #1a2a6c;
-            --secondary: #b21f1f;
-            --accent: #ff9966;
-            --accent2: #4facfe;
-            --dark: #0a0e2a;
-            --light: #f8f9ff;
+            font-family: 'Inter', sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-color: var(--light-gray);
             min-height: 100vh;
-            color: var(--light);
+            color: var(--text);
             overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
+            flex: 1;
         }
         
         /* Header & Navigation */
@@ -40,78 +54,90 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 20px 40px;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(10, 14, 42, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            background: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            height: 80px;
         }
         
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            background: linear-gradient(to right, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size: 2.5rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0;
+            color: var(--accent);
+            transition: var(--transition);
+            padding: 0 10px;
         }
         
         .hamburger {
             background: none;
             border: none;
-            color: var(--light);
+            color: var(--text);
             font-size: 1.8rem;
             cursor: pointer;
             display: none;
             z-index: 1001;
+            transition: var(--transition);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .hamburger:hover {
+            background: rgba(74, 139, 255, 0.1);
         }
         
         .nav-menu {
             display: flex;
-            gap: 30px;
+            gap: 5px;
         }
         
         .nav-menu a {
-            color: var(--light);
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 500;
-            padding: 8px 15px;
-            border-radius: 30px;
-            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            position: relative;
         }
         
         .nav-menu a:hover {
-            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            background: rgba(74, 139, 255, 0.05);
         }
         
         .nav-menu a.active {
-            background: linear-gradient(to right, var(--accent), var(--accent2));
-            color: var(--dark);
-            font-weight: 600;
+            color: var(--accent);
+            background: rgba(74, 139, 255, 0.1);
         }
         
         /* Page Content */
         .page {
             display: none;
-            min-height: 100vh;
+            min-height: 100%;
             padding-top: 100px;
-            padding-bottom: 50px;
-            animation: fadeIn 0.8s ease-out;
+            padding-bottom: 20px;
+            animation: fadeIn 0.8s ease;
+            opacity: 0;
+            transform: translateY(20px);
         }
         
         .page.active {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
         
         @keyframes fadeIn {
@@ -126,250 +152,272 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 50px 20px;
+            padding: 40px 20px;
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            height: calc(100vh - 120px);
         }
         
         .hero {
-            max-width: 800px;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
         }
         
         .hero h1 {
             font-size: 3.5rem;
-            margin-bottom: 20px;
-            background: linear-gradient(to right, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            margin-bottom: 40px;
+            color: var(--primary);
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
         
         .action-buttons {
             display: flex;
-            gap: 30px;
-            margin-top: 30px;
+            gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
+            margin-top: 20px;
         }
         
         .btn {
             padding: 18px 50px;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            border-radius: 50px;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+            background: white;
+            color: var(--accent);
+            border: 1px solid var(--border);
+            box-shadow: var(--card-shadow);
         }
         
         .btn:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            background: var(--accent-light);
         }
         
         .btn-encrypt {
-            background: linear-gradient(to right, var(--accent), #ff5e62);
-            color: var(--dark);
+            background: var(--accent);
+            color: white;
         }
         
-        .btn-decrypt {
-            background: linear-gradient(to right, var(--accent2), #00f2fe);
-            color: var(--dark);
-        }
-        
-        .features {
-            display: flex;
-            gap: 30px;
-            margin-top: 80px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .feature-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            width: 300px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .feature-card i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            background: linear-gradient(to right, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
+        .btn-encrypt:hover {
+            background: #3a7af0;
+            box-shadow: 0 10px 25px rgba(74, 139, 255, 0.25);
         }
         
         /* Encryption/Decryption Pages */
         .crypto-page {
-            max-width: 800px;
+            max-width: 700px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: white;
+            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
         }
         
         .page-title {
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 30px;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .page-title i {
+            font-size: 1.8rem;
+            color: var(--accent);
         }
         
         .input-group {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         .input-group label {
             display: block;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
+            margin-bottom: 12px;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
+            color: var(--text);
+            font-weight: 500;
         }
         
         textarea {
             width: 100%;
-            height: 180px;
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--light);
-            font-size: 1.1rem;
+            height: 160px;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
+            font-size: 1rem;
             resize: vertical;
-            transition: all 0.3s;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
         }
         
         textarea:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(255, 153, 102, 0.4);
+            box-shadow: 0 0 0 3px rgba(74, 139, 255, 0.1);
         }
         
         .crypto-btn {
             display: block;
-            padding: 18px;
-            font-size: 1.2rem;
+            padding: 16px;
+            font-size: 1rem;
             font-weight: 600;
             border: none;
-            border-radius: 50px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             width: 100%;
-            margin: 25px 0 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            margin: 25px 0 20px;
+            background: var(--accent);
+            color: white;
+            font-family: 'Inter', sans-serif;
         }
         
-        .encrypt-btn {
-            background: linear-gradient(to right, var(--accent), #ff5e62);
-            color: var(--dark);
+        .crypto-btn:hover {
+            background: #3a7af0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 139, 255, 0.2);
         }
         
         .decrypt-btn {
-            background: linear-gradient(to right, var(--accent2), #00f2fe);
-            color: var(--dark);
+            background: var(--secondary);
+        }
+        
+        .decrypt-btn:hover {
+            background: #15203a;
         }
         
         .result-container {
-            margin-top: 40px;
-            padding-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
             display: none;
+            animation: fadeIn 0.6s ease-out;
         }
         
         .result-container h2 {
             margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-size: 2rem;
-            color: var(--accent);
+            gap: 12px;
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
         }
         
         .result-box {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
+            background: var(--accent-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
             overflow-wrap: break-word;
-            border-left: 4px solid var(--accent);
-            min-height: 100px;
-            font-size: 1.1rem;
+            min-height: 80px;
+            font-size: 1rem;
             line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid rgba(74, 139, 255, 0.1);
         }
         
         .result-label {
             display: block;
-            margin-bottom: 12px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
             color: var(--accent);
-            font-size: 1.1rem;
+            font-size: 0.95rem;
         }
         
         .back-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--light);
-            padding: 15px 40px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
+            background: white;
+            color: var(--text);
+            padding: 14px 35px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 10px;
             margin: 30px auto 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
         
         .back-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        /* Status & Loading */
+        .status {
+            padding: 16px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid transparent;
+        }
+        
+        .status.loading {
+            background: rgba(106, 125, 254, 0.1);
+            display: block;
+            border-color: rgba(106, 125, 254, 0.2);
+            color: var(--accent);
+        }
+        
+        .status.success {
+            background: rgba(16, 185, 129, 0.1);
+            display: block;
+            border-color: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.1);
+            display: block;
+            border-color: rgba(239, 68, 68, 0.2);
+            color: var(--error);
         }
         
         /* Responsive Design */
         @media (max-width: 992px) {
             .hero h1 {
-                font-size: 2.8rem;
+                font-size: 3rem;
             }
             
             .btn {
                 padding: 16px 40px;
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
             
             .hamburger {
@@ -382,70 +430,94 @@
                 right: -300px;
                 height: 100vh;
                 width: 280px;
-                background: rgba(10, 14, 42, 0.98);
-                backdrop-filter: blur(10px);
+                background: white;
+                backdrop-filter: blur(15px);
                 flex-direction: column;
                 padding: 100px 30px 30px;
-                transition: right 0.4s ease;
-                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+                transition: var(--transition);
+                z-index: 1000;
+                border-left: 1px solid var(--border);
             }
             
             .nav-menu.active {
                 right: 0;
             }
+            
+            .page-title {
+                font-size: 1.8rem;
+            }
         }
         
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.3rem;
+                font-size: 2.5rem;
+                margin-bottom: 30px;
             }
             
             .action-buttons {
                 flex-direction: column;
-                gap: 20px;
+                gap: 15px;
             }
             
             .btn {
                 width: 100%;
                 justify-content: center;
+                padding: 18px;
+                font-size: 1.1rem;
             }
             
-            .features {
-                flex-direction: column;
-                align-items: center;
+            .crypto-page {
+                padding: 30px;
             }
             
-            .feature-card {
-                width: 100%;
-                max-width: 400px;
+            .landing-page {
+                height: auto;
+                padding: 40px 0;
             }
             
-            .page-title {
+            header {
+                height: 70px;
+                padding: 15px 20px;
+            }
+            
+            .page {
+                padding-top: 90px;
+            }
+            
+            .logo {
                 font-size: 2rem;
             }
         }
         
         @media (max-width: 480px) {
             .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
+                font-size: 2.2rem;
             }
             
             .crypto-page {
-                padding: 30px 20px;
+                padding: 25px 20px;
+            }
+            
+            .page-title {
+                font-size: 1.6rem;
+            }
+            
+            .btn {
+                padding: 16px;
+                font-size: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header>
+    <header id="mainHeader">
         <div class="logo">
             <i class="fas fa-lock"></i>
-            <span>CryptoLock</span>
         </div>
         <button class="hamburger" id="hamburger">
             <i class="fas fa-bars"></i>
@@ -462,36 +534,15 @@
         <div class="container">
             <div class="landing-page">
                 <div class="hero">
-                    <h1>Enkripsi & Dekripsi Aman</h1>
-                    <p>Lindungi pesan Anda dengan sistem enkripsi canggih yang bekerja sepenuhnya di perangkat Anda. Tidak ada data yang dikirim ke server, semua proses dilakukan secara lokal untuk keamanan maksimal.</p>
+                    <h1>Enkripsi Dekripsi</h1>
                     
                     <div class="action-buttons">
                         <button class="btn btn-encrypt" data-page="encrypt">
-                            <i class="fas fa-lock"></i> Enkripsi
+                            <i class="fas fa-lock"></i> Enkripsi Pesan
                         </button>
-                        <button class="btn btn-decrypt" data-page="decrypt">
-                            <i class="fas fa-unlock"></i> Dekripsi
+                        <button class="btn" data-page="decrypt">
+                            <i class="fas fa-unlock"></i> Dekripsi Kode
                         </button>
-                    </div>
-                </div>
-                
-                <div class="features">
-                    <div class="feature-card">
-                        <i class="fas fa-shield-alt"></i>
-                        <h3>Keamanan Tinggi</h3>
-                        <p>Menggunakan algoritma kustom dengan kode acak unik untuk setiap karakter</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <i class="fas fa-bolt"></i>
-                        <h3>Proses Cepat</h3>
-                        <p>Enkripsi dan dekripsi dilakukan secara instan di perangkat Anda</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <i class="fas fa-user-secret"></i>
-                        <h3>Privasi Terjaga</h3>
-                        <p>Tidak ada data yang dikirim ke server, semua proses dilakukan secara lokal</p>
                     </div>
                 </div>
             </div>
@@ -506,10 +557,10 @@
                 
                 <div id="encrypt-input">
                     <div class="input-group">
-                        <label for="plaintext"><i class="fas fa-pen"></i> Masukkan teks:</label>
-                        <textarea id="plaintext" placeholder="Ketik teks yang akan dienkripsi..."></textarea>
+                        <label for="plaintext"><i class="fas fa-pen"></i> Masukkan teks untuk dienkripsi:</label>
+                        <textarea id="plaintext" placeholder="Ketik pesan yang ingin Anda lindungi..."></textarea>
                     </div>
-                    <button id="encrypt-btn" class="crypto-btn encrypt-btn"><i class="fas fa-key"></i> Enkripsi</button>
+                    <button id="encrypt-btn" class="crypto-btn encrypt-btn"><i class="fas fa-key"></i> Enkripsi Pesan</button>
                 </div>
                 
                 <div id="encrypt-result" class="result-container">
@@ -522,6 +573,9 @@
                         <span class="result-label">Kode Enkripsi:</span>
                         <div id="encrypted-text"></div>
                     </div>
+                    
+                    <div class="status" id="encrypt-status"></div>
+                    
                     <button id="back-encrypt-btn" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali</button>
                 </div>
             </div>
@@ -536,10 +590,10 @@
                 
                 <div id="decrypt-input">
                     <div class="input-group">
-                        <label for="ciphertext"><i class="fas fa-code"></i> Masukkan kode:</label>
-                        <textarea id="ciphertext" placeholder="Tempel kode enkripsi di sini..."></textarea>
+                        <label for="ciphertext"><i class="fas fa-code"></i> Masukkan kode enkripsi:</label>
+                        <textarea id="ciphertext" placeholder="Tempel kode enkripsi yang ingin Anda dekripsi..."></textarea>
                     </div>
-                    <button id="decrypt-btn" class="crypto-btn decrypt-btn"><i class="fas fa-key"></i> Dekripsi</button>
+                    <button id="decrypt-btn" class="crypto-btn decrypt-btn"><i class="fas fa-key"></i> Dekripsi Kode</button>
                 </div>
                 
                 <div id="decrypt-result" class="result-container">
@@ -552,6 +606,9 @@
                         <span class="result-label">Pesan Terdekripsi:</span>
                         <div id="decrypted-text"></div>
                     </div>
+                    
+                    <div class="status" id="decrypt-status"></div>
+                    
                     <button id="back-decrypt-btn" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali</button>
                 </div>
             </div>
@@ -559,33 +616,311 @@
     </div>
     
     <script>
-        // Mapping acak tetap
-        const MAPPING = {
-            'A': '9R7X2', 'B': 'Y4fK8', 'C': 'p3Lq9', 'D': 'T6sN1', 'E': 'm8J2z',
-            'F': 'b5Vc7', 'G': 'W3dG4', 'H': 'k9Ht5', 'I': 'Q2rR6', 'J': 'x5Sf8',
-            'K': 'Z4aM3', 'L': '7nBv9', 'M': 'e6Pc1', 'N': 'U8hD4', 'O': '2jK9w',
-            'P': '3gF6q', 'Q': 'L5tY7', 'R': '4vXp8', 'S': '1zR3s', 'T': '6M9d2',
-            'U': '8bN4c', 'V': 'q7Vh5', 'W': 's2Wj6', 'X': '9Tk3m', 'Y': '5Hp8r',
-            'Z': 'd1Qf4',
-            'a': 'A7c3Z', 'b': 'B9e5Y', 'c': 'C4g7X', 'd': 'D2h8W', 'e': 'E6j9V',
-            'f': 'F3k5U', 'g': 'G8m2T', 'h': 'H1n6S', 'i': 'I5p4R', 'j': 'J7q3Q',
-            'k': 'K9r8P', 'l': 'L2s1O', 'm': 'M4t9N', 'n': 'N6v5M', 'o': 'O8w3L',
-            'p': 'P1x7K', 'q': 'Q3y9J', 'r': 'R5z4I', 's': 'S7a2H', 't': 'T9b8G',
-            'u': 'U4d6F', 'v': 'V6f1E', 'w': 'W8h3D', 'x': 'X2j5C', 'y': 'Y7k9B',
-            'z': 'Z3m4A',
-            '0': 'n9P5q', '1': 'r8S2w', '2': 't3D4e', '3': 'u5F6r', '4': 'v7G8t',
-            '5': 'w9H0y', '6': 'x1J2u', '7': 'y3K4i', '8': 'z5L6o', '9': 'a7M8p',
-            ' ': 'cX2d3', ',': 'fV4g5', '.': 'hB6j7', '?': 'kN8m9', '!': 'pQ0r1',
-            "'": 'sT2u3', '"': 'vW4x5', '-': 'yZ6a7', '/': 'bC8d9', '*': 'eE0f1',
-            '(': 'gH2i3', ')': 'jJ4k5', ':': 'lL6m7', ';': 'oN8p9'
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA55MnyugVxHjJ2ozr7DQn9vOEN0AkUPtI",
+            authDomain: "encrypt-decrypt-40fba.firebaseapp.com",
+            databaseURL: "https://encrypt-decrypt-40fba-default-rtdb.firebaseio.com",
+            projectId: "encrypt-decrypt-40fba",
+            storageBucket: "encrypt-decrypt-40fba.firebasestorage.app",
+            messagingSenderId: "177213724926",
+            appId: "1:177213724926:web:f6fac60033fe758085edaf",
+            measurementId: "G-BZRQR97LTN"
         };
-
+        
+        // Initialize Firebase
+        let firebaseApp = null;
+        let database = null;
+        
+        // Fungsi untuk inisialisasi Firebase
+        function initializeFirebase() {
+            try {
+                // Coba inisialisasi Firebase
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                database = firebase.database();
+                console.log("Firebase initialized successfully");
+                return true;
+            } catch (error) {
+                console.error("Firebase initialization error:", error);
+                return false;
+            }
+        }
+        
+        // Karakter yang didukung
+        const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,.?!'\"_-/*():;+×÷=<>[]@#$€£¥₩%^&`~|{}°¡¿";
+        
+        // Fungsi untuk membuat mapping acak
+        function generateRandomMapping() {
+            const mapping = {};
+            const usedCodes = new Set();
+            
+            for (const char of CHARACTERS) {
+                let code;
+                do {
+                    // Generate kode acak 5 karakter
+                    code = '';
+                    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    for (let i = 0; i < 5; i++) {
+                        code += characters.charAt(Math.floor(Math.random() * characters.length));
+                    }
+                } while (usedCodes.has(code));
+                
+                mapping[char] = code;
+                usedCodes.add(code);
+            }
+            
+            return mapping;
+        }
+        
+        // Fungsi untuk mengonversi karakter khusus menjadi format yang aman
+        function encodeSpecialChars(char) {
+            const specialChars = {
+                '.': 'DOT',
+                '#': 'HASH',
+                '$': 'DOLLAR',
+                '/': 'SLASH',
+                '[': 'LBRACKET',
+                ']': 'RBRACKET'
+            };
+            return specialChars[char] || char;
+        }
+        
+        // Fungsi untuk mengembalikan karakter khusus dari format yang aman
+        function decodeSpecialChars(encodedChar) {
+            const specialChars = {
+                'DOT': '.',
+                'HASH': '#',
+                'DOLLAR': '$',
+                'SLASH': '/',
+                'LBRACKET': '[',
+                'RBRACKET': ']'
+            };
+            return specialChars[encodedChar] || encodedChar;
+        }
+        
+        // Fungsi untuk menyimpan mapping dengan aman
+        function prepareMappingForFirebase(mapping) {
+            const safeMapping = {};
+            for (const [char, code] of Object.entries(mapping)) {
+                safeMapping[encodeSpecialChars(char)] = code;
+            }
+            return safeMapping;
+        }
+        
+        // Fungsi untuk mengambil mapping dari Firebase
+        function parseMappingFromFirebase(firebaseData) {
+            const mapping = {};
+            for (const [encodedChar, code] of Object.entries(firebaseData)) {
+                mapping[decodeSpecialChars(encodedChar)] = code;
+            }
+            return mapping;
+        }
+        
+        // Fungsi untuk mendapatkan timestamp saat ini dalam format yang diinginkan
+        function getCurrentTimestamp() {
+            const now = new Date();
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds}`;
+        }
+        
+        // Fungsi untuk enkripsi dengan Firebase (dengan timestamp)
+        async function encryptWithFirebase(text) {
+            // Tampilkan status loading
+            const statusEl = document.getElementById('encrypt-status');
+            statusEl.textContent = "Mengenkripsi...";
+            statusEl.className = "status loading";
+            statusEl.style.display = "block";
+            
+            try {
+                // Generate mapping acak baru
+                const newMapping = generateRandomMapping();
+                
+                // Dapatkan nomor mapping berikutnya dari Firebase
+                const mappingsRef = database.ref('mappings');
+                const snapshot = await mappingsRef.once('value');
+                
+                let newMappingNumber = 1;
+                if (snapshot.exists()) {
+                    const mappingKeys = Object.keys(snapshot.val());
+                    const mappingNumbers = mappingKeys.map(key => parseInt(key, 10));
+                    newMappingNumber = Math.max(...mappingNumbers) + 1;
+                }
+                
+                // Format nomor mapping dengan 2 digit
+                const formattedMappingNumber = newMappingNumber.toString().padStart(2, '0');
+                
+                // Konversi mapping ke format aman
+                const safeMapping = prepareMappingForFirebase(newMapping);
+                
+                // Dapatkan timestamp saat ini
+                const timestamp = getCurrentTimestamp();
+                
+                // Buat objek data yang akan disimpan
+                const mappingData = {
+                    mapping: safeMapping,
+                    timestamp: timestamp
+                };
+                
+                // Simpan mapping baru ke Firebase
+                await database.ref(`mappings/${formattedMappingNumber}`).set(mappingData);
+                
+                // Enkripsi teks menggunakan mapping baru
+                let encryptedText = [];
+                for (const char of text) {
+                    if (newMapping[char]) {
+                        encryptedText.push(newMapping[char]);
+                    } else {
+                        encryptedText.push(char);
+                    }
+                }
+                
+                // Format hasil: "nomor_mapping,kode1,kode2,..."
+                const result = `${formattedMappingNumber},${encryptedText.join(',')}`;
+                
+                // Update status
+                statusEl.textContent = "Enkripsi berhasil!";
+                statusEl.className = "status success";
+                
+                return result;
+            } catch (error) {
+                console.error("Encryption error:", error);
+                statusEl.textContent = `Error: ${error.message}`;
+                statusEl.className = "status error";
+                return null;
+            }
+        }
+        
+        // Fungsi untuk dekripsi dengan Firebase
+        async function decryptWithFirebase(cipherText) {
+            // Tampilkan status loading
+            const statusEl = document.getElementById('decrypt-status');
+            statusEl.textContent = "Mendekripsi...";
+            statusEl.className = "status loading";
+            statusEl.style.display = "block";
+            
+            try {
+                // Pisahkan nomor mapping dari kode enkripsi
+                const parts = cipherText.split(',');
+                const mappingNumber = parts[0];
+                const codes = parts.slice(1);
+                
+                // Validasi nomor mapping
+                if (!mappingNumber || isNaN(parseInt(mappingNumber))) {
+                    throw new Error("Format kode tidak valid");
+                }
+                
+                // Dapatkan mapping dari Firebase
+                const mappingRef = database.ref(`mappings/${mappingNumber}`);
+                const snapshot = await mappingRef.once('value');
+                
+                if (!snapshot.exists()) {
+                    throw new Error("mapping_not_found");
+                }
+                
+                const mappingData = snapshot.val();
+                const safeMapping = mappingData.mapping;
+                const mapping = parseMappingFromFirebase(safeMapping);
+                
+                // Buat reverse mapping
+                const reverseMapping = {};
+                for (const [char, code] of Object.entries(mapping)) {
+                    reverseMapping[code] = char;
+                }
+                
+                // Dekripsi kode
+                let decryptedText = [];
+                let hasInvalidCode = false;
+                
+                for (const code of codes) {
+                    if (reverseMapping[code]) {
+                        decryptedText.push(reverseMapping[code]);
+                    } else {
+                        decryptedText.push(`[${code}?]`);
+                        hasInvalidCode = true;
+                    }
+                }
+                
+                const result = decryptedText.join('');
+                
+                if (hasInvalidCode) {
+                    statusEl.textContent = "Dekripsi gagal: Beberapa kode tidak valid";
+                    statusEl.className = "status error";
+                } else {
+                    statusEl.textContent = "Dekripsi berhasil!";
+                    statusEl.className = "status success";
+                }
+                
+                return result;
+            } catch (error) {
+                console.error("Decryption error:", error);
+                
+                if (error.message === "mapping_not_found") {
+                    statusEl.textContent = "Dekripsi gagal: Mapping tidak ditemukan atau telah dihapus";
+                } else {
+                    statusEl.textContent = `Error: ${error.message}`;
+                }
+                statusEl.className = "status error";
+                
+                return null;
+            }
+        }
+        
+        // Fungsi untuk menghapus mapping yang sudah lebih dari 24 jam
+        async function deleteOldMappings() {
+            try {
+                const now = new Date();
+                const twentyFourHours = 24 * 60 * 60 * 1000; // 24 jam dalam milidetik
+                
+                const mappingsRef = database.ref('mappings');
+                const snapshot = await mappingsRef.once('value');
+                
+                if (!snapshot.exists()) {
+                    return; // Tidak ada data
+                }
+                
+                const updates = {};
+                snapshot.forEach((childSnapshot) => {
+                    const mappingKey = childSnapshot.key;
+                    const mappingData = childSnapshot.val();
+                    
+                    // Parse timestamp dari Firebase
+                    const timestampStr = mappingData.timestamp;
+                    const [datePart, timePart] = timestampStr.split(', ');
+                    const [day, month, year] = datePart.split('/');
+                    const [hours, minutes, seconds] = timePart.split(':');
+                    
+                    // Buat objek Date dari timestamp
+                    const mappingDate = new Date(year, month - 1, day, hours, minutes, seconds);
+                    const mappingTime = mappingDate.getTime();
+                    
+                    // Jika lebih dari 24 jam, tandai untuk dihapus
+                    if (now - mappingTime > twentyFourHours) {
+                        updates[`mappings/${mappingKey}`] = null; // hapus dengan set null
+                    }
+                });
+                
+                // Lakukan update (menghapus yang sudah lama)
+                if (Object.keys(updates).length > 0) {
+                    await database.ref().update(updates);
+                }
+            } catch (error) {
+                console.error("Error deleting old mappings:", error);
+            }
+        }
+        
         // DOM Elements
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('navMenu');
         const navLinks = document.querySelectorAll('.nav-link');
         const pages = document.querySelectorAll('.page');
         const actionButtons = document.querySelectorAll('.btn[data-page]');
+        const mainHeader = document.getElementById('mainHeader');
         
         // Navigation Functions
         function toggleNavMenu() {
@@ -621,38 +956,11 @@
                     link.classList.add('active');
                 }
             });
-        }
-        
-        // Encryption Functions
-        function encrypt(text) {
-            let result = [];
-            for (let char of text) {
-                if (MAPPING[char]) {
-                    result.push(MAPPING[char]);
-                } else {
-                    result.push(char);
-                }
-            }
-            return result.join(',');
-        }
-        
-        function decrypt(cipher) {
-            // Create reverse mapping
-            const reverseMapping = {};
-            for (const [key, value] of Object.entries(MAPPING)) {
-                reverseMapping[value] = key;
-            }
             
-            let result = [];
-            const codes = cipher.split(',');
-            for (let code of codes) {
-                if (reverseMapping[code]) {
-                    result.push(reverseMapping[code]);
-                } else {
-                    result.push(code);
-                }
+            // Jika halaman yang ditampilkan adalah landing page, hapus mapping yang sudah lama
+            if (pageId === 'landing') {
+                deleteOldMappings();
             }
-            return result.join('');
         }
         
         // Event Listeners
@@ -674,19 +982,26 @@
         });
         
         // Encryption Page Events
-        document.getElementById('encrypt-btn').addEventListener('click', function() {
+        document.getElementById('encrypt-btn').addEventListener('click', async function() {
             const plaintext = document.getElementById('plaintext').value;
             if (!plaintext.trim()) {
                 alert('Masukkan teks terlebih dahulu!');
                 return;
             }
             
-            document.getElementById('original-text').textContent = plaintext;
-            const encrypted = encrypt(plaintext);
-            document.getElementById('encrypted-text').textContent = encrypted;
+            if (!firebaseApp) {
+                alert("Firebase belum terinisialisasi. Silakan coba lagi.");
+                return;
+            }
             
-            document.getElementById('encrypt-input').style.display = 'none';
-            document.getElementById('encrypt-result').style.display = 'block';
+            const encrypted = await encryptWithFirebase(plaintext);
+            if (encrypted) {
+                document.getElementById('original-text').textContent = plaintext;
+                document.getElementById('encrypted-text').textContent = encrypted;
+                
+                document.getElementById('encrypt-input').style.display = 'none';
+                document.getElementById('encrypt-result').style.display = 'block';
+            }
         });
         
         document.getElementById('back-encrypt-btn').addEventListener('click', function() {
@@ -694,19 +1009,31 @@
             document.getElementById('encrypt-input').style.display = 'block';
             document.getElementById('plaintext').value = '';
             document.getElementById('plaintext').focus();
+            document.getElementById('encrypt-status').style.display = 'none';
         });
         
         // Decryption Page Events
-        document.getElementById('decrypt-btn').addEventListener('click', function() {
+        document.getElementById('decrypt-btn').addEventListener('click', async function() {
             const ciphertext = document.getElementById('ciphertext').value;
             if (!ciphertext.trim()) {
                 alert('Masukkan kode enkripsi terlebih dahulu!');
                 return;
             }
             
+            if (!firebaseApp) {
+                alert("Firebase belum terinisialisasi. Silakan coba lagi.");
+                return;
+            }
+            
+            const decrypted = await decryptWithFirebase(ciphertext);
+            
             document.getElementById('original-code').textContent = ciphertext;
-            const decrypted = decrypt(ciphertext);
-            document.getElementById('decrypted-text').textContent = decrypted;
+            
+            if (decrypted !== null) {
+                document.getElementById('decrypted-text').textContent = decrypted;
+            } else {
+                document.getElementById('decrypted-text').textContent = "Dekripsi gagal";
+            }
             
             document.getElementById('decrypt-input').style.display = 'none';
             document.getElementById('decrypt-result').style.display = 'block';
@@ -717,9 +1044,13 @@
             document.getElementById('decrypt-input').style.display = 'block';
             document.getElementById('ciphertext').value = '';
             document.getElementById('ciphertext').focus();
+            document.getElementById('decrypt-status').style.display = 'none';
         });
         
-        // Initialize
+        // Initialize Firebase
+        initializeFirebase();
+        
+        // Initialize Page
         showPage('landing');
     </script>
 </body>
