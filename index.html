@@ -75,6 +75,7 @@
             color: var(--accent);
             transition: var(--transition);
             padding: 0 10px;
+            text-decoration: none;
         }
         
         .hamburger {
@@ -121,28 +122,6 @@
         .nav-menu a.active {
             color: var(--accent);
             background: rgba(74, 139, 255, 0.1);
-        }
-        
-        /* Page Content */
-        .page {
-            display: none;
-            min-height: 100%;
-            padding-top: 100px;
-            padding-bottom: 20px;
-            animation: fadeIn 0.8s ease;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        .page.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
         
         /* Landing Page */
@@ -199,6 +178,8 @@
             color: var(--accent);
             border: 1px solid var(--border);
             box-shadow: var(--card-shadow);
+            text-decoration: none;
+            display: inline-flex;
         }
         
         .btn:hover {
@@ -217,163 +198,45 @@
             box-shadow: 0 10px 25px rgba(74, 139, 255, 0.25);
         }
         
-        /* Encryption/Decryption Pages */
-        .crypto-page {
-            max-width: 700px;
-            margin: 0 auto;
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 80px;
+            padding: 40px 0;
+        }
+        
+        .feature-card {
             background: white;
+            padding: 30px;
             border-radius: 16px;
-            padding: 40px;
+            text-align: center;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
+            transition: var(--transition);
         }
         
-        .page-title {
-            font-size: 2rem;
-            margin-bottom: 30px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            color: var(--primary);
-            font-weight: 600;
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
         
-        .page-title i {
-            font-size: 1.8rem;
+        .feature-icon {
+            font-size: 2.5rem;
             color: var(--accent);
-        }
-        
-        .input-group {
-            margin-bottom: 25px;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 12px;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text);
-            font-weight: 500;
-        }
-        
-        textarea {
-            width: 100%;
-            height: 160px;
-            padding: 18px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: white;
-            color: var(--text);
-            font-size: 1rem;
-            resize: vertical;
-            transition: var(--transition);
-            font-family: 'Inter', sans-serif;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(74, 139, 255, 0.1);
-        }
-        
-        .crypto-btn {
-            display: block;
-            padding: 16px;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
-            margin: 25px 0 20px;
-            background: var(--accent);
-            color: white;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .crypto-btn:hover {
-            background: #3a7af0;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74, 139, 255, 0.2);
-        }
-        
-        .decrypt-btn {
-            background: var(--secondary);
-        }
-        
-        .decrypt-btn:hover {
-            background: #15203a;
-        }
-        
-        .result-container {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border);
-            display: none;
-            animation: fadeIn 0.6s ease-out;
-        }
-        
-        .result-container h2 {
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.5rem;
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        .result-box {
-            background: var(--accent-light);
-            border-radius: 12px;
-            padding: 20px;
             margin-bottom: 20px;
-            overflow-wrap: break-word;
-            min-height: 80px;
-            font-size: 1rem;
-            line-height: 1.6;
-            font-family: 'Inter', sans-serif;
-            border: 1px solid rgba(74, 139, 255, 0.1);
         }
         
-        .result-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--accent);
-            font-size: 0.95rem;
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
         }
         
-        .back-btn {
-            background: white;
-            color: var(--text);
-            padding: 14px 35px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 30px auto 0;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-        
-        .back-btn:hover {
-            background: var(--accent-light);
-            border-color: var(--accent);
-            color: var(--accent);
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
         }
         
         /* Status & Loading */
@@ -442,10 +305,6 @@
             .nav-menu.active {
                 right: 0;
             }
-            
-            .page-title {
-                font-size: 1.8rem;
-            }
         }
         
         @media (max-width: 768px) {
@@ -466,10 +325,6 @@
                 font-size: 1.1rem;
             }
             
-            .crypto-page {
-                padding: 30px;
-            }
-            
             .landing-page {
                 height: auto;
                 padding: 40px 0;
@@ -480,26 +335,18 @@
                 padding: 15px 20px;
             }
             
-            .page {
-                padding-top: 90px;
-            }
-            
             .logo {
                 font-size: 2rem;
+            }
+            
+            .features {
+                margin-top: 60px;
             }
         }
         
         @media (max-width: 480px) {
             .hero h1 {
                 font-size: 2.2rem;
-            }
-            
-            .crypto-page {
-                padding: 25px 20px;
-            }
-            
-            .page-title {
-                font-size: 1.6rem;
             }
             
             .btn {
@@ -510,106 +357,52 @@
             .logo {
                 font-size: 1.8rem;
             }
+            
+            .feature-card {
+                padding: 25px 20px;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            background: white;
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header id="mainHeader">
-        <div class="logo">
+        <a href="index.html" class="logo">
             <i class="fas fa-lock"></i>
-        </div>
+        </a>
         <button class="hamburger" id="hamburger">
             <i class="fas fa-bars"></i>
         </button>
         <nav class="nav-menu" id="navMenu">
-            <a href="#" class="nav-link" data-page="landing"><i class="fas fa-home"></i> Home</a>
-            <a href="#" class="nav-link" data-page="encrypt"><i class="fas fa-lock"></i> Enkripsi</a>
-            <a href="#" class="nav-link" data-page="decrypt"><i class="fas fa-unlock"></i> Dekripsi</a>
+            <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+            <a href="encrypt.html" class="nav-link"><i class="fas fa-lock"></i> Enkripsi</a>
+            <a href="decrypt.html" class="nav-link"><i class="fas fa-unlock"></i> Dekripsi</a>
         </nav>
     </header>
     
-    <!-- Landing Page -->
-    <div class="page active" id="landing">
-        <div class="container">
-            <div class="landing-page">
-                <div class="hero">
-                    <h1>Enkripsi Dekripsi</h1>
-                    
-                    <div class="action-buttons">
-                        <button class="btn btn-encrypt" data-page="encrypt">
-                            <i class="fas fa-lock"></i> Enkripsi Pesan
-                        </button>
-                        <button class="btn" data-page="decrypt">
-                            <i class="fas fa-unlock"></i> Dekripsi Kode
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Encryption Page -->
-    <div class="page" id="encrypt">
-        <div class="container">
-            <div class="crypto-page">
-                <h1 class="page-title"><i class="fas fa-lock"></i> Enkripsi</h1>
+    <!-- Landing Page Content -->
+    <div class="container">
+        <div class="landing-page">
+            <div class="hero">
+                <h1>Enkripsi Dekripsi</h1>
                 
-                <div id="encrypt-input">
-                    <div class="input-group">
-                        <label for="plaintext"><i class="fas fa-pen"></i> Masukkan teks untuk dienkripsi:</label>
-                        <textarea id="plaintext" placeholder="Ketik pesan yang ingin Anda lindungi..."></textarea>
-                    </div>
-                    <button id="encrypt-btn" class="crypto-btn encrypt-btn"><i class="fas fa-key"></i> Enkripsi Pesan</button>
-                </div>
-                
-                <div id="encrypt-result" class="result-container">
-                    <h2><i class="fas fa-shield-alt"></i> Hasil Enkripsi</h2>
-                    <div class="result-box">
-                        <span class="result-label">Teks Asli:</span>
-                        <div id="original-text"></div>
-                    </div>
-                    <div class="result-box">
-                        <span class="result-label">Kode Enkripsi:</span>
-                        <div id="encrypted-text"></div>
-                    </div>
-                    
-                    <div class="status" id="encrypt-status"></div>
-                    
-                    <button id="back-encrypt-btn" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Decryption Page -->
-    <div class="page" id="decrypt">
-        <div class="container">
-            <div class="crypto-page">
-                <h1 class="page-title"><i class="fas fa-unlock"></i> Dekripsi</h1>
-                
-                <div id="decrypt-input">
-                    <div class="input-group">
-                        <label for="ciphertext"><i class="fas fa-code"></i> Masukkan kode enkripsi:</label>
-                        <textarea id="ciphertext" placeholder="Tempel kode enkripsi yang ingin Anda dekripsi..."></textarea>
-                    </div>
-                    <button id="decrypt-btn" class="crypto-btn decrypt-btn"><i class="fas fa-key"></i> Dekripsi Kode</button>
-                </div>
-                
-                <div id="decrypt-result" class="result-container">
-                    <h2><i class="fas fa-search"></i> Hasil Dekripsi</h2>
-                    <div class="result-box">
-                        <span class="result-label">Kode Asli:</span>
-                        <div id="original-code"></div>
-                    </div>
-                    <div class="result-box">
-                        <span class="result-label">Pesan Terdekripsi:</span>
-                        <div id="decrypted-text"></div>
-                    </div>
-                    
-                    <div class="status" id="decrypt-status"></div>
-                    
-                    <button id="back-decrypt-btn" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <div class="action-buttons">
+                    <a href="encrypt.html" class="btn btn-encrypt">
+                        <i class="fas fa-lock"></i> Enkripsi Pesan
+                    </a>
+                    <a href="decrypt.html" class="btn">
+                        <i class="fas fa-unlock"></i> Dekripsi Kode
+                    </a>
                 </div>
             </div>
         </div>
@@ -646,76 +439,6 @@
             }
         }
         
-        // Karakter yang didukung
-        const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,.?!'\"_-/*():;+×÷=<>[]@#$€£¥₩%^&`~|{}°¡¿";
-        
-        // Fungsi untuk membuat mapping acak
-        function generateRandomMapping() {
-            const mapping = {};
-            const usedCodes = new Set();
-            
-            for (const char of CHARACTERS) {
-                let code;
-                do {
-                    // Generate kode acak 5 karakter
-                    code = '';
-                    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                    for (let i = 0; i < 5; i++) {
-                        code += characters.charAt(Math.floor(Math.random() * characters.length));
-                    }
-                } while (usedCodes.has(code));
-                
-                mapping[char] = code;
-                usedCodes.add(code);
-            }
-            
-            return mapping;
-        }
-        
-        // Fungsi untuk mengonversi karakter khusus menjadi format yang aman
-        function encodeSpecialChars(char) {
-            const specialChars = {
-                '.': 'DOT',
-                '#': 'HASH',
-                '$': 'DOLLAR',
-                '/': 'SLASH',
-                '[': 'LBRACKET',
-                ']': 'RBRACKET'
-            };
-            return specialChars[char] || char;
-        }
-        
-        // Fungsi untuk mengembalikan karakter khusus dari format yang aman
-        function decodeSpecialChars(encodedChar) {
-            const specialChars = {
-                'DOT': '.',
-                'HASH': '#',
-                'DOLLAR': '$',
-                'SLASH': '/',
-                'LBRACKET': '[',
-                'RBRACKET': ']'
-            };
-            return specialChars[encodedChar] || encodedChar;
-        }
-        
-        // Fungsi untuk menyimpan mapping dengan aman
-        function prepareMappingForFirebase(mapping) {
-            const safeMapping = {};
-            for (const [char, code] of Object.entries(mapping)) {
-                safeMapping[encodeSpecialChars(char)] = code;
-            }
-            return safeMapping;
-        }
-        
-        // Fungsi untuk mengambil mapping dari Firebase
-        function parseMappingFromFirebase(firebaseData) {
-            const mapping = {};
-            for (const [encodedChar, code] of Object.entries(firebaseData)) {
-                mapping[decodeSpecialChars(encodedChar)] = code;
-            }
-            return mapping;
-        }
-        
         // Fungsi untuk mendapatkan timestamp saat ini dalam format yang diinginkan
         function getCurrentTimestamp() {
             const now = new Date();
@@ -727,148 +450,6 @@
             const seconds = now.getSeconds().toString().padStart(2, '0');
             
             return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds}`;
-        }
-        
-        // Fungsi untuk enkripsi dengan Firebase (dengan timestamp)
-        async function encryptWithFirebase(text) {
-            // Tampilkan status loading
-            const statusEl = document.getElementById('encrypt-status');
-            statusEl.textContent = "Mengenkripsi...";
-            statusEl.className = "status loading";
-            statusEl.style.display = "block";
-            
-            try {
-                // Generate mapping acak baru
-                const newMapping = generateRandomMapping();
-                
-                // Dapatkan nomor mapping berikutnya dari Firebase
-                const mappingsRef = database.ref('mappings');
-                const snapshot = await mappingsRef.once('value');
-                
-                let newMappingNumber = 1;
-                if (snapshot.exists()) {
-                    const mappingKeys = Object.keys(snapshot.val());
-                    const mappingNumbers = mappingKeys.map(key => parseInt(key, 10));
-                    newMappingNumber = Math.max(...mappingNumbers) + 1;
-                }
-                
-                // Format nomor mapping dengan 2 digit
-                const formattedMappingNumber = newMappingNumber.toString().padStart(2, '0');
-                
-                // Konversi mapping ke format aman
-                const safeMapping = prepareMappingForFirebase(newMapping);
-                
-                // Dapatkan timestamp saat ini
-                const timestamp = getCurrentTimestamp();
-                
-                // Buat objek data yang akan disimpan
-                const mappingData = {
-                    mapping: safeMapping,
-                    timestamp: timestamp
-                };
-                
-                // Simpan mapping baru ke Firebase
-                await database.ref(`mappings/${formattedMappingNumber}`).set(mappingData);
-                
-                // Enkripsi teks menggunakan mapping baru
-                let encryptedText = [];
-                for (const char of text) {
-                    if (newMapping[char]) {
-                        encryptedText.push(newMapping[char]);
-                    } else {
-                        encryptedText.push(char);
-                    }
-                }
-                
-                // Format hasil: "nomor_mapping,kode1,kode2,..."
-                const result = `${formattedMappingNumber},${encryptedText.join(',')}`;
-                
-                // Update status
-                statusEl.textContent = "Enkripsi berhasil!";
-                statusEl.className = "status success";
-                
-                return result;
-            } catch (error) {
-                console.error("Encryption error:", error);
-                statusEl.textContent = `Error: ${error.message}`;
-                statusEl.className = "status error";
-                return null;
-            }
-        }
-        
-        // Fungsi untuk dekripsi dengan Firebase
-        async function decryptWithFirebase(cipherText) {
-            // Tampilkan status loading
-            const statusEl = document.getElementById('decrypt-status');
-            statusEl.textContent = "Mendekripsi...";
-            statusEl.className = "status loading";
-            statusEl.style.display = "block";
-            
-            try {
-                // Pisahkan nomor mapping dari kode enkripsi
-                const parts = cipherText.split(',');
-                const mappingNumber = parts[0];
-                const codes = parts.slice(1);
-                
-                // Validasi nomor mapping
-                if (!mappingNumber || isNaN(parseInt(mappingNumber))) {
-                    throw new Error("Format kode tidak valid");
-                }
-                
-                // Dapatkan mapping dari Firebase
-                const mappingRef = database.ref(`mappings/${mappingNumber}`);
-                const snapshot = await mappingRef.once('value');
-                
-                if (!snapshot.exists()) {
-                    throw new Error("mapping_not_found");
-                }
-                
-                const mappingData = snapshot.val();
-                const safeMapping = mappingData.mapping;
-                const mapping = parseMappingFromFirebase(safeMapping);
-                
-                // Buat reverse mapping
-                const reverseMapping = {};
-                for (const [char, code] of Object.entries(mapping)) {
-                    reverseMapping[code] = char;
-                }
-                
-                // Dekripsi kode
-                let decryptedText = [];
-                let hasInvalidCode = false;
-                
-                for (const code of codes) {
-                    if (reverseMapping[code]) {
-                        decryptedText.push(reverseMapping[code]);
-                    } else {
-                        decryptedText.push(`[${code}?]`);
-                        hasInvalidCode = true;
-                    }
-                }
-                
-                const result = decryptedText.join('');
-                
-                if (hasInvalidCode) {
-                    statusEl.textContent = "Dekripsi gagal: Beberapa kode tidak valid";
-                    statusEl.className = "status error";
-                } else {
-                    statusEl.textContent = "Dekripsi berhasil!";
-                    statusEl.className = "status success";
-                }
-                
-                return result;
-            } catch (error) {
-                console.error("Decryption error:", error);
-                
-                if (error.message === "mapping_not_found") {
-                    statusEl.textContent = "Dekripsi gagal: Mapping tidak ditemukan atau telah dihapus";
-                } else {
-                    statusEl.textContent = `Error: ${error.message}`;
-                }
-                statusEl.className = "status error";
-                
-                return null;
-            }
         }
         
         // Fungsi untuk menghapus mapping yang sudah lebih dari 24 jam
@@ -917,10 +498,6 @@
         // DOM Elements
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('navMenu');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const pages = document.querySelectorAll('.page');
-        const actionButtons = document.querySelectorAll('.btn[data-page]');
-        const mainHeader = document.getElementById('mainHeader');
         
         // Navigation Functions
         function toggleNavMenu() {
@@ -935,123 +512,27 @@
             }
         }
         
-        function showPage(pageId) {
-            // Hide all pages
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Show selected page
-            document.getElementById(pageId).classList.add('active');
-            
-            // Close mobile menu
-            navMenu.classList.remove('active');
-            hamburger.querySelector('i').classList.remove('fa-times');
-            hamburger.querySelector('i').classList.add('fa-bars');
-            
-            // Update active nav link
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-page') === pageId) {
-                    link.classList.add('active');
-                }
-            });
-            
-            // Jika halaman yang ditampilkan adalah landing page, hapus mapping yang sudah lama
-            if (pageId === 'landing') {
-                deleteOldMappings();
-            }
-        }
-        
         // Event Listeners
         hamburger.addEventListener('click', toggleNavMenu);
         
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const pageId = link.getAttribute('data-page');
-                showPage(pageId);
-            });
-        });
-        
-        actionButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const pageId = button.getAttribute('data-page');
-                showPage(pageId);
-            });
-        });
-        
-        // Encryption Page Events
-        document.getElementById('encrypt-btn').addEventListener('click', async function() {
-            const plaintext = document.getElementById('plaintext').value;
-            if (!plaintext.trim()) {
-                alert('Masukkan teks terlebih dahulu!');
-                return;
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                navMenu.classList.remove('active');
+                hamburger.querySelector('i').classList.remove('fa-times');
+                hamburger.querySelector('i').classList.add('fa-bars');
             }
-            
-            if (!firebaseApp) {
-                alert("Firebase belum terinisialisasi. Silakan coba lagi.");
-                return;
-            }
-            
-            const encrypted = await encryptWithFirebase(plaintext);
-            if (encrypted) {
-                document.getElementById('original-text').textContent = plaintext;
-                document.getElementById('encrypted-text').textContent = encrypted;
-                
-                document.getElementById('encrypt-input').style.display = 'none';
-                document.getElementById('encrypt-result').style.display = 'block';
-            }
-        });
-        
-        document.getElementById('back-encrypt-btn').addEventListener('click', function() {
-            document.getElementById('encrypt-result').style.display = 'none';
-            document.getElementById('encrypt-input').style.display = 'block';
-            document.getElementById('plaintext').value = '';
-            document.getElementById('plaintext').focus();
-            document.getElementById('encrypt-status').style.display = 'none';
-        });
-        
-        // Decryption Page Events
-        document.getElementById('decrypt-btn').addEventListener('click', async function() {
-            const ciphertext = document.getElementById('ciphertext').value;
-            if (!ciphertext.trim()) {
-                alert('Masukkan kode enkripsi terlebih dahulu!');
-                return;
-            }
-            
-            if (!firebaseApp) {
-                alert("Firebase belum terinisialisasi. Silakan coba lagi.");
-                return;
-            }
-            
-            const decrypted = await decryptWithFirebase(ciphertext);
-            
-            document.getElementById('original-code').textContent = ciphertext;
-            
-            if (decrypted !== null) {
-                document.getElementById('decrypted-text').textContent = decrypted;
-            } else {
-                document.getElementById('decrypted-text').textContent = "Dekripsi gagal";
-            }
-            
-            document.getElementById('decrypt-input').style.display = 'none';
-            document.getElementById('decrypt-result').style.display = 'block';
-        });
-        
-        document.getElementById('back-decrypt-btn').addEventListener('click', function() {
-            document.getElementById('decrypt-result').style.display = 'none';
-            document.getElementById('decrypt-input').style.display = 'block';
-            document.getElementById('ciphertext').value = '';
-            document.getElementById('ciphertext').focus();
-            document.getElementById('decrypt-status').style.display = 'none';
         });
         
         // Initialize Firebase
         initializeFirebase();
         
-        // Initialize Page
-        showPage('landing');
+        // Hapus mapping lama setiap kali halaman dimuat
+        window.addEventListener('load', () => {
+            if (firebaseApp) {
+                deleteOldMappings();
+            }
+        });
     </script>
 </body>
 </html>
