@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dekripsi - CryptoLock Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        :root {
+            --primary: #0a1121;
+            --secondary: #1c2a4a;
+            --accent: #4a8bff;
+            --accent-light: #eef5ff;
+            --text: #333;
+            --text-secondary: #666;
+            --light-gray: #f5f7fa;
+            --border: #e1e5eb;
+            --success: #10b981;
+            --error: #ef4444;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            height: 80px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            color: var(--accent);
+            transition: var(--transition);
+            padding: 0 10px;
+            text-decoration: none;
+        }
+        
+        .hamburger {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: none;
+            z-index: 1001;
+            transition: var(--transition);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .hamburger:hover {
+            background: rgba(74, 139, 255, 0.1);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .nav-menu a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--accent);
+            background: rgba(74, 139, 255, 0.05);
+        }
+        
+        .nav-menu a.active {
+            color: var(--accent);
+            background: rgba(74, 139, 255, 0.1);
+        }
+        
+        /* Page Content */
+        .page {
+            min-height: 100%;
+            padding-top: 100px;
+            padding-bottom: 20px;
+            animation: fadeIn 0.8s ease;
+            opacity: 1;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Decryption Page */
+        .crypto-page {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .page-title i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+            font-weight: 500;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 160px;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
+            font-size: 1rem;
+            resize: vertical;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(74, 139, 255, 0.1);
+        }
+        
+        .crypto-btn {
+            display: block;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin: 25px 0 20px;
+            background: var(--secondary);
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .crypto-btn:hover {
+            background: #15203a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(28, 42, 74, 0.2);
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .result-container h2 {
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .result-box {
+            background: var(--accent-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow-wrap: break-word;
+            min-height: 80px;
+            font-size: 1rem;
+            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid rgba(74, 139, 255, 0.1);
+        }
+        
+        .result-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--accent);
+            font-size: 0.95rem;
+        }
+        
+        .back-btn {
+            background: white;
+            color: var(--text);
+            padding: 14px 35px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 30px auto 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            text-decoration: none;
+            display: inline-flex;
+        }
+        
+        .back-btn:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .btn-container {
+            text-align: center;
+        }
+        
+        /* Status & Loading */
+        .status {
+            padding: 16px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid transparent;
+        }
+        
+        .status.loading {
+            background: rgba(106, 125, 254, 0.1);
+            display: block;
+            border-color: rgba(106, 125, 254, 0.2);
+            color: var(--accent);
+        }
+        
+        .status.success {
+            background: rgba(16, 185, 129, 0.1);
+            display: block;
+            border-color: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.1);
+            display: block;
+            border-color: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -300px;
+                height: 100vh;
+                width: 280px;
+                background: white;
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                padding: 100px 30px 30px;
+                transition: var(--transition);
+                z-index: 1000;
+                border-left: 1px solid var(--border);
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .page-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .crypto-page {
+                padding: 30px;
+            }
+            
+            header {
+                height: 70px;
+                padding: 15px 20px;
+            }
+            
+            .page {
+                padding-top: 90px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .crypto-page {
+                padding: 25px 20px;
+            }
+            
+            .page-title {
+                font-size: 1.6rem;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="mainHeader">
+        <a href="index.html" class="logo">
+            <i class="fas fa-lock"></i>
+        </a>
+        <button class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav class="nav-menu" id="navMenu">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="encrypt.html" class="nav-link"><i class="fas fa-lock"></i> Enkripsi</a>
+            <a href="decrypt.html" class="nav-link active"><i class="fas fa-unlock"></i> Dekripsi</a>
+        </nav>
+    </header>
+    
+    <!-- Decryption Page Content -->
+    <div class="container">
+        <div class="page" id="decrypt">
+            <div class="crypto-page">
+                <h1 class="page-title"><i class="fas fa-unlock"></i> Dekripsi</h1>
+                
+                <div id="decrypt-input">
+                    <div class="input-group">
+                        <label for="ciphertext"><i class="fas fa-code"></i> Masukkan kode enkripsi:</label>
+                        <textarea id="ciphertext" placeholder="Tempel kode enkripsi yang ingin Anda dekripsi..."></textarea>
+                    </div>
+                    <button id="decrypt-btn" class="crypto-btn decrypt-btn"><i class="fas fa-key"></i> Dekripsi Kode</button>
+                </div>
+                
+                <div id="decrypt-result" class="result-container">
+                    <h2><i class="fas fa-search"></i> Hasil Dekripsi</h2>
+                    <div class="result-box">
+                        <span class="result-label">Kode Asli:</span>
+                        <div id="original-code"></div>
+                    </div>
+                    <div class="result-box">
+                        <span class="result-label">Pesan Terdekripsi:</span>
+                        <div id="decrypted-text"></div>
+                    </div>
+                    
+                    <div class="status" id="decrypt-status"></div>
+                    
+                    <div class="btn-container">
+                        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Home</a>
+                        <button id="back-decrypt-btn" class="back-btn" style="margin-left: 10px;"><i class="fas fa-redo"></i> Dekripsi Lagi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA55MnyugVxHjJ2ozr7DQn9vOEN0AkUPtI",
+            authDomain: "encrypt-decrypt-40fba.firebaseapp.com",
+            databaseURL: "https://encrypt-decrypt-40fba-default-rtdb.firebaseio.com",
+            projectId: "encrypt-decrypt-40fba",
+            storageBucket: "encrypt-decrypt-40fba.firebasestorage.app",
+            messagingSenderId: "177213724926",
+            appId: "1:177213724926:web:f6fac60033fe758085edaf",
+            measurementId: "G-BZRQR97LTN"
+        };
+        
+        // Initialize Firebase
+        let firebaseApp = null;
+        let database = null;
+        
+        // Fungsi untuk inisialisasi Firebase
+        function initializeFirebase() {
+            try {
+                // Coba inisialisasi Firebase
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                database = firebase.database();
+                console.log("Firebase initialized successfully");
+                return true;
+            } catch (error) {
+                console.error("Firebase initialization error:", error);
+                return false;
+            }
+        }
+        
+        // Fungsi untuk mengonversi karakter khusus menjadi format yang aman
+        function encodeSpecialChars(char) {
+            const specialChars = {
+                '.': 'DOT',
+                '#': 'HASH',
+                '$': 'DOLLAR',
+                '/': 'SLASH',
+                '[': 'LBRACKET',
+                ']': 'RBRACKET'
+            };
+            return specialChars[char] || char;
+        }
+        
+        // Fungsi untuk mengembalikan karakter khusus dari format yang aman
+        function decodeSpecialChars(encodedChar) {
+            const specialChars = {
+                'DOT': '.',
+                'HASH': '#',
+                'DOLLAR': '$',
+                'SLASH': '/',
+                'LBRACKET': '[',
+                'RBRACKET': ']'
+            };
+            return specialChars[encodedChar] || encodedChar;
+        }
+        
+        // Fungsi untuk mengambil mapping dari Firebase
+        function parseMappingFromFirebase(firebaseData) {
+            const mapping = {};
+            for (const [encodedChar, code] of Object.entries(firebaseData)) {
+                mapping[decodeSpecialChars(encodedChar)] = code;
+            }
+            return mapping;
+        }
+        
+        // Fungsi untuk dekripsi dengan Firebase
+        async function decryptWithFirebase(cipherText) {
+            // Tampilkan status loading
+            const statusEl = document.getElementById('decrypt-status');
+            statusEl.textContent = "Mendekripsi...";
+            statusEl.className = "status loading";
+            statusEl.style.display = "block";
+            
+            try {
+                // Pisahkan nomor mapping dari kode enkripsi
+                const parts = cipherText.split(',');
+                const mappingNumber = parts[0];
+                const codes = parts.slice(1);
+                
+                // Validasi nomor mapping
+                if (!mappingNumber || isNaN(parseInt(mappingNumber))) {
+                    throw new Error("Format kode tidak valid");
+                }
+                
+                // Dapatkan mapping dari Firebase
+                const mappingRef = database.ref(`mappings/${mappingNumber}`);
+                const snapshot = await mappingRef.once('value');
+                
+                if (!snapshot.exists()) {
+                    throw new Error("mapping_not_found");
+                }
+                
+                const mappingData = snapshot.val();
+                const safeMapping = mappingData.mapping;
+                const mapping = parseMappingFromFirebase(safeMapping);
+                
+                // Buat reverse mapping
+                const reverseMapping = {};
+                for (const [char, code] of Object.entries(mapping)) {
+                    reverseMapping[code] = char;
+                }
+                
+                // Dekripsi kode
+                let decryptedText = [];
+                let hasInvalidCode = false;
+                
+                for (const code of codes) {
+                    if (reverseMapping[code]) {
+                        decryptedText.push(reverseMapping[code]);
+                    } else {
+                        decryptedText.push(`[${code}?]`);
+                        hasInvalidCode = true;
+                    }
+                }
+                
+                const result = decryptedText.join('');
+                
+                if (hasInvalidCode) {
+                    statusEl.textContent = "Dekripsi gagal: Beberapa kode tidak valid";
+                    statusEl.className = "status error";
+                } else {
+                    statusEl.textContent = "Dekripsi berhasil!";
+                    statusEl.className = "status success";
+                }
+                
+                return result;
+            } catch (error) {
+                console.error("Decryption error:", error);
+                
+                if (error.message === "mapping_not_found") {
+                    statusEl.textContent = "Dekripsi gagal: Mapping tidak ditemukan atau telah dihapus";
+                } else {
+                    statusEl.textContent = `Error: ${error.message}`;
+                }
+                statusEl.className = "status error";
+                
+                return null;
+            }
+        }
+        
+        // DOM Elements
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        
+        // Navigation Functions
+        function toggleNavMenu() {
+            navMenu.classList.toggle('active');
+            const icon = hamburger.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+        
+        // Event Listeners
+        hamburger.addEventListener('click', toggleNavMenu);
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                navMenu.classList.remove('active');
+                hamburger.querySelector('i').classList.remove('fa-times');
+                hamburger.querySelector('i').classList.add('fa-bars');
+            }
+        });
+        
+        // Decryption Page Events
+        document.getElementById('decrypt-btn').addEventListener('click', async function() {
+            const ciphertext = document.getElementById('ciphertext').value;
+            if (!ciphertext.trim()) {
+                alert('Masukkan kode enkripsi terlebih dahulu!');
+                return;
+            }
+            
+            if (!firebaseApp) {
+                alert("Firebase belum terinisialisasi. Silakan coba lagi.");
+                return;
+            }
+            
+            const decrypted = await decryptWithFirebase(ciphertext);
+            
+            document.getElementById('original-code').textContent = ciphertext;
+            
+            if (decrypted !== null) {
+                document.getElementById('decrypted-text').textContent = decrypted;
+            } else {
+                document.getElementById('decrypted-text').textContent = "Dekripsi gagal";
+            }
+            
+            document.getElementById('decrypt-input').style.display = 'none';
+            document.getElementById('decrypt-result').style.display = 'block';
+        });
+        
+        document.getElementById('back-decrypt-btn').addEventListener('click', function() {
+            document.getElementById('decrypt-result').style.display = 'none';
+            document.getElementById('decrypt-input').style.display = 'block';
+            document.getElementById('ciphertext').value = '';
+            document.getElementById('ciphertext').focus();
+            document.getElementById('decrypt-status').style.display = 'none';
+        });
+        
+        // Initialize Firebase
+        initializeFirebase();
+    </script>
+</body>
+</html>
